@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { TacosConfigService } from './tacos-config/tacos-config.service';
-import { buildLogSearchEventQuery } from './tacos-query.builder';
+import { buildLogSearchEventQuery } from './tacos-query/tacos-query.builder';
 
 
 @Injectable({

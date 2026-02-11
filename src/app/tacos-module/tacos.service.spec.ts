@@ -3,7 +3,7 @@ import { provideHttpClient, HttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { TacosService } from './tacos.service';
 import { TacosConfigService } from './tacos-config/tacos-config.service';
-import { buildLogSearchEventQuery } from './tacos-query.builder';
+import { buildLogSearchEventQuery } from './tacos-query/tacos-query.builder';
 describe('TacosService', () => {
   let service: TacosService;
   let httpTesting: HttpTestingController;
