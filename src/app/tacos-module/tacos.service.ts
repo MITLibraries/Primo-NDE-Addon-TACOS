@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { TacosConfigService } from './tacos-config/tacos-config.service';
 
 
 
@@ -10,10 +11,10 @@ import { catchError, tap } from 'rxjs/operators';
 })
 export class TacosService {
 
-  constructor() { }
-  private httpClient = inject(HttpClient);
+  constructor(private config: TacosConfigService, private http: HttpClient) { }
 
-  private tacosUrl = 'https://tacos.libraries.mit.edu/graphql';
+
+  private readonly tacosUrl = this.config.getTacosUrl();
   private tacosHeaders = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -23,7 +24,7 @@ export class TacosService {
     const safeTerm = (searchTerm ?? '').replace(/"/g, '\\"');
     const graphQlQuery = `{logSearchEvent(searchTerm: \"${safeTerm}\", sourceSystem: \"nde-sandbox\") {phrase detectors {suggestedResources {title url}}}}`;
     console.log(graphQlQuery)
-    return this.httpClient.post(
+    return this.http.post(
       this.tacosUrl,
       { query: graphQlQuery },
       { headers: this.tacosHeaders }
