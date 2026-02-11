@@ -3,7 +3,7 @@ import { provideHttpClient, HttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { TacosService } from './tacos.service';
 import { TacosConfigService } from './tacos-config/tacos-config.service';
-
+import { buildLogSearchEventQuery } from './tacos-query.builder';
 describe('TacosService', () => {
   let service: TacosService;
   let httpTesting: HttpTestingController;
@@ -36,7 +36,7 @@ describe('TacosService', () => {
 
     const req = httpTesting.expectOne('fakeTacosURL');
     expect(req.request.method).toBe('POST');
-    expect(req.request.body.query).toContain(searchTerm);
+    expect(req.request.body.query).toBe(buildLogSearchEventQuery(searchTerm));
     expect(req.request.headers.get('Accept')).toBe('application/json');
     expect(req.request.headers.get('Content-Type')).toBe('application/json');
 

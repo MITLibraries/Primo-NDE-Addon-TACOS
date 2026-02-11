@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { TacosConfigService } from './tacos-config/tacos-config.service';
-
+import { buildLogSearchEventQuery } from './tacos-query.builder';
 
 
 @Injectable({
@@ -20,9 +20,8 @@ export class TacosService {
     'Content-Type': 'application/json'
   };
 
-  getTacosResponse(searchTerm?: string): Observable<any> {
-    const safeTerm = (searchTerm ?? '').replace(/"/g, '\\"');
-    const graphQlQuery = `{logSearchEvent(searchTerm: \"${safeTerm}\", sourceSystem: \"nde-sandbox\") {phrase detectors {suggestedResources {title url}}}}`;
+  getTacosResponse(searchTerm: string): Observable<any> {
+    const graphQlQuery = buildLogSearchEventQuery(searchTerm)
     console.log(graphQlQuery)
     return this.http.post(
       this.tacosUrl,
