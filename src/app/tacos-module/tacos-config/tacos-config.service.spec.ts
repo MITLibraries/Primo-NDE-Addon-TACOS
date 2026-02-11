@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { TacosConfigService } from './tacos-config.service';
+import { TACOS_CONFIG_DEFAULTS } from './tacos-config.constants';
 describe('ConfigService', () => {
   let service: TacosConfigService;
-  const DEFAULT_TACOS_URL = 'https://tacos.libraries.mit.edu/graphql';
+
 
   describe('without MODULE_PARAMETERS', () => {
     beforeEach(() => {
@@ -10,36 +11,36 @@ describe('ConfigService', () => {
       service = TestBed.inject(TacosConfigService);
     });
 
-    it('should be created', () => {
-      expect(service).toBeTruthy();
+    it('should return defaults when MODULE_PARAMETERS is not provided', () => {
+      expect(service.tacosUrl).toBe(TACOS_CONFIG_DEFAULTS.tacosUrl);
+      expect(service.displayRecs).toBe(TACOS_CONFIG_DEFAULTS.displayRecs);
     });
+    it('should return default display flag when MODULE_PARAMETERS is not provided', () => {
+      const flag = service.displayRecs;
 
-    it('should return default TACOS API URL when MODULE_PARAMETERS is not provided', () => {
-      const url = service.getTacosUrl();
-      expect(url).toBe(DEFAULT_TACOS_URL);
-    });
+    })
   });
 
-  describe('with MODULE_PARAMETERS containing tacosApiUrl', () => {
-    const customTacosUrl = 'https://custom-tacos.example.com/graphql';
-
+  describe('with expected keys in MODULE_PARAMETERS', () => {
+    const fakeTacosUrl = 'https://custom-tacos.example.com/graphql';
+    const fakedisplayRecs = false
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
           TacosConfigService,
-          { provide: 'MODULE_PARAMETERS', useValue: { tacosUrl: customTacosUrl } }
+          { provide: 'MODULE_PARAMETERS', useValue: { tacosUrl: fakeTacosUrl, displayRecs: fakedisplayRecs } }
         ]
       });
       service = TestBed.inject(TacosConfigService);
     });
 
-    it('should return TACOS API URL from MODULE_PARAMETERS', () => {
-      const url = service.getTacosUrl();
-      expect(url).toBe(customTacosUrl);
+    it('should return the expected values from MODULE_PARAMETERS', () => {
+      expect(service.tacosUrl).toBe(fakeTacosUrl);
+      expect(service.displayRecs).toBe(fakedisplayRecs);
     });
   });
 
-  describe('with MODULE_PARAMETERS without tacosUrl', () => {
+  describe('with MODULE_PARAMETERS without the expected keys ', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
@@ -50,9 +51,10 @@ describe('ConfigService', () => {
       service = TestBed.inject(TacosConfigService);
     });
 
-    it('should return default TACOS API URL when tacosApiUrl is not in MODULE_PARAMETERS', () => {
-      const url = service.getTacosUrl();
-      expect(url).toBe(DEFAULT_TACOS_URL);
+    it('should use the defaults', () => {
+      expect(service.tacosUrl).toBe(TACOS_CONFIG_DEFAULTS.tacosUrl);
+      expect(service.displayRecs).toBe(TACOS_CONFIG_DEFAULTS.displayRecs);
+
     });
   });
 
@@ -67,9 +69,9 @@ describe('ConfigService', () => {
       service = TestBed.inject(TacosConfigService);
     });
 
-    it('should return default TACOS API URL when MODULE_PARAMETERS is empty', () => {
-      const url = service.getTacosUrl();
-      expect(url).toBe(DEFAULT_TACOS_URL);
+    it('should use the defaults', () => {
+      expect(service.tacosUrl).toBe(TACOS_CONFIG_DEFAULTS.tacosUrl);
+      expect(service.displayRecs).toBe(TACOS_CONFIG_DEFAULTS.displayRecs)
     });
   });
 });

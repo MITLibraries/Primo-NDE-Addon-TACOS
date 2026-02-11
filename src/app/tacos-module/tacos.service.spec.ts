@@ -1,5 +1,5 @@
-import { TestBed } from '@angular/core/testing';
-import { provideHttpClient, HttpClient } from '@angular/common/http';
+import { fakeAsync, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { TacosService } from './tacos.service';
 import { TacosConfigService } from './tacos-config/tacos-config.service';
@@ -8,10 +8,12 @@ describe('TacosService', () => {
   let service: TacosService;
   let httpTesting: HttpTestingController;
   let tacosConfigServiceMock: jasmine.SpyObj<TacosConfigService>;
-
+  let fakeTacosUrl: string;
   beforeEach(() => {
-    tacosConfigServiceMock = jasmine.createSpyObj('TacosConfigService', ['getTacosUrl']);
-    tacosConfigServiceMock.getTacosUrl.and.returnValue("fakeTacosURL")
+    fakeTacosUrl = 'https://fake-tacos.test/graphql';
+    tacosConfigServiceMock = jasmine.createSpyObj('TacosConfigService', {}, {
+      tacosUrl: fakeTacosUrl
+    });
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
@@ -28,19 +30,36 @@ describe('TacosService', () => {
   afterEach(() => {
     httpTesting.verify();
   });
+  describe('getTacosResponse', () => {
+    it('should make POST request to URL from TacosConfigService', () => {
+      const searchTerm = 'foo';
 
-  it('should call POST with URL from TacosConfigService', () => {
-    const searchTerm = 'foo';
+      service.getTacosResponse(searchTerm).subscribe();
 
-    service.getTacosResponse(searchTerm).subscribe();
+      const req = httpTesting.expectOne(fakeTacosUrl);
+      expect(req.request.method).toBe('POST');
+      req.flush({});
+    });
 
-    const req = httpTesting.expectOne('fakeTacosURL');
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body.query).toBe(buildLogSearchEventQuery(searchTerm));
-    expect(req.request.headers.get('Accept')).toBe('application/json');
-    expect(req.request.headers.get('Content-Type')).toBe('application/json');
+    it('should send correct GraphQL query in request body', () => {
+      const searchTerm = 'foo';
 
-    req.flush({});
+      service.getTacosResponse(searchTerm).subscribe();
 
-  });
+      const req = httpTesting.expectOne(fakeTacosUrl);
+      expect(req.request.body.query).toBe(buildLogSearchEventQuery(searchTerm));
+      req.flush({});
+    });
+
+    it('should set correct headers', () => {
+      const searchTerm = 'foo';
+
+      service.getTacosResponse(searchTerm).subscribe();
+
+      const req = httpTesting.expectOne(fakeTacosUrl);
+      expect(req.request.headers.get('Accept')).toBe('application/json');
+      expect(req.request.headers.get('Content-Type')).toBe('application/json');
+      req.flush({});
+    });
+  })
 });
