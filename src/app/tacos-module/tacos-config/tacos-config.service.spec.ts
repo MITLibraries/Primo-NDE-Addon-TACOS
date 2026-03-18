@@ -4,7 +4,6 @@ import { TACOS_CONFIG_DEFAULTS } from './tacos-config.constants';
 describe('ConfigService', () => {
   let service: TacosConfigService;
 
-
   describe('without MODULE_PARAMETERS', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({});
@@ -15,28 +14,27 @@ describe('ConfigService', () => {
       expect(service.tacosUrl).toBe(TACOS_CONFIG_DEFAULTS.tacosUrl);
       expect(service.displayRecs).toBe(TACOS_CONFIG_DEFAULTS.displayRecs);
     });
-    it('should return default display flag when MODULE_PARAMETERS is not provided', () => {
-      const flag = service.displayRecs;
-
-    })
   });
 
   describe('with expected keys in MODULE_PARAMETERS', () => {
     const fakeTacosUrl = 'https://custom-tacos.example.com/graphql';
-    const fakedisplayRecs = false
+    const fakeDisplayRecs = false;
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
           TacosConfigService,
-          { provide: 'MODULE_PARAMETERS', useValue: { tacosUrl: fakeTacosUrl, displayRecs: fakedisplayRecs } }
-        ]
+          {
+            provide: 'MODULE_PARAMETERS',
+            useValue: { tacosUrl: fakeTacosUrl, displayRecs: fakeDisplayRecs },
+          },
+        ],
       });
       service = TestBed.inject(TacosConfigService);
     });
 
     it('should return the expected values from MODULE_PARAMETERS', () => {
       expect(service.tacosUrl).toBe(fakeTacosUrl);
-      expect(service.displayRecs).toBe(fakedisplayRecs);
+      expect(service.displayRecs).toBe(fakeDisplayRecs);
     });
   });
 
@@ -45,8 +43,11 @@ describe('ConfigService', () => {
       TestBed.configureTestingModule({
         providers: [
           TacosConfigService,
-          { provide: 'MODULE_PARAMETERS', useValue: { someOtherConfig: 'value' } }
-        ]
+          {
+            provide: 'MODULE_PARAMETERS',
+            useValue: { someOtherConfig: 'value' },
+          },
+        ],
       });
       service = TestBed.inject(TacosConfigService);
     });
@@ -54,7 +55,6 @@ describe('ConfigService', () => {
     it('should use the defaults', () => {
       expect(service.tacosUrl).toBe(TACOS_CONFIG_DEFAULTS.tacosUrl);
       expect(service.displayRecs).toBe(TACOS_CONFIG_DEFAULTS.displayRecs);
-
     });
   });
 
@@ -63,15 +63,15 @@ describe('ConfigService', () => {
       TestBed.configureTestingModule({
         providers: [
           TacosConfigService,
-          { provide: 'MODULE_PARAMETERS', useValue: {} }
-        ]
+          { provide: 'MODULE_PARAMETERS', useValue: {} },
+        ],
       });
       service = TestBed.inject(TacosConfigService);
     });
 
     it('should use the defaults', () => {
       expect(service.tacosUrl).toBe(TACOS_CONFIG_DEFAULTS.tacosUrl);
-      expect(service.displayRecs).toBe(TACOS_CONFIG_DEFAULTS.displayRecs)
+      expect(service.displayRecs).toBe(TACOS_CONFIG_DEFAULTS.displayRecs);
     });
   });
 });
