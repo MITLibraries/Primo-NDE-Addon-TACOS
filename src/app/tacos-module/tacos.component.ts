@@ -15,12 +15,12 @@ export const selectSearchState = createFeatureSelector<SearchState>('Search');
 // Selector to extract just the search term (q parameter) from the Search state
 export const selectSearchTerm = createSelector(
   selectSearchState,
-  state => state?.searchParams?.q ?? ''
+  (state) => state?.searchParams?.q ?? '',
 );
 
 /**
  * Component that displays TACOS recommendations based on the current search term.
- * 
+ *
  * The component always calls the TACOS service for logging purposes, but only displays
  * recommendations in the UI if displayRecs config is enabled.
  */
@@ -29,7 +29,7 @@ export const selectSearchTerm = createSelector(
   standalone: true,
   imports: [AsyncPipe],
   templateUrl: './tacos.component.html',
-  styleUrls: ['./tacos.component.scss']
+  styleUrls: ['./tacos.component.scss'],
 })
 export class TacosComponent implements OnInit {
   private tacosService = inject(TacosService);
@@ -54,9 +54,9 @@ export class TacosComponent implements OnInit {
     // 3. Filters out empty search terms
     // 4. Calls TACOS service with the search term
     this.tacosResponse$ = this.store.select(selectSearchTerm).pipe(
-      map(q => (q ?? '').trim()),
-      filter(q => q.length > 0),
-      switchMap(q => this.tacosService.getTacosResponse(q)),
+      map((q) => (q ?? '').trim()),
+      filter((q) => q.length > 0),
+      switchMap((q) => this.tacosService.getTacosResponse(q)),
     );
 
     // Subscribe immediately to ensure the TACOS service is called for logging,

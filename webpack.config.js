@@ -45,8 +45,16 @@ module.exports = {
           noErrorOnMissing: true,
           globOptions: {
             ignore: [
+        {
+          from: 'src/assets', to: 'assets',
+          noErrorOnMissing: true,
+          globOptions: {
+            ignore: [
               "**/.gitkeep", // Make sure this matches exactly the files you want to exclude
               "**/.*" // This pattern excludes all hidden files
+            ]
+          }
+        } // Adjust the paths as needed
             ]
           }
         } // Adjust the paths as needed
@@ -59,6 +67,7 @@ module.exports = {
     // END DISABLE ngDevMode as it is not needed in a remoteEntry
     new ModuleFederationPlugin({
       library: { type: "module" },
+      library: { type: "module" },
 
       // For remotes (please adjust)
       name: "customModule",
@@ -70,7 +79,11 @@ module.exports = {
       // For hosts (please adjust)
       // remotes: {
       //     "mfe1": "http://localhost:3000/remoteEntry.js",
+      // For hosts (please adjust)
+      // remotes: {
+      //     "mfe1": "http://localhost:3000/remoteEntry.js",
 
+      // },
       // },
 
       shared: share({

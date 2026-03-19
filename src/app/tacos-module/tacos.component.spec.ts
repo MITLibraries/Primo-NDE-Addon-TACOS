@@ -3,7 +3,10 @@ import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TacosComponent, selectSearchTerm } from './tacos.component';
 import { TacosService } from './tacos.service';
-import { TacosConfigService, TacosModuleParameters } from './tacos-config/tacos-config.service';
+import {
+  TacosConfigService,
+  TacosModuleParameters,
+} from './tacos-config/tacos-config.service';
 
 describe('TacosComponent', () => {
   let fixture: ComponentFixture<TacosComponent>;
@@ -17,33 +20,33 @@ describe('TacosComponent', () => {
         detectors: {
           suggestedResources: [
             { url: 'https://taco1.com', title: 'Taco One' },
-            { url: 'https://taco2.com', title: 'Taco Two' }
-          ]
-        }
-      }
-    }
+            { url: 'https://taco2.com', title: 'Taco Two' },
+          ],
+        },
+      },
+    },
   };
 
   beforeEach(async () => {
-    tacosServiceMock = jasmine.createSpyObj('TacosService', ['getTacosResponse']);
+    tacosServiceMock = jasmine.createSpyObj('TacosService', [
+      'getTacosResponse',
+    ]);
     tacosServiceMock.getTacosResponse.and.returnValue(of(MOCK_TACOS_RESPONSE));
 
     tacosConfigServiceMock = {
       tacosUrl: 'https://fake-tacos.test/graphql',
-      displayRecs: true
+      displayRecs: true,
     };
 
     await TestBed.configureTestingModule({
       imports: [TacosComponent],
       providers: [
         provideMockStore({
-          selectors: [
-            { selector: selectSearchTerm, value: 'foo' }
-          ]
+          selectors: [{ selector: selectSearchTerm, value: 'foo' }],
         }),
         { provide: TacosService, useValue: tacosServiceMock },
-        { provide: TacosConfigService, useValue: tacosConfigServiceMock }
-      ]
+        { provide: TacosConfigService, useValue: tacosConfigServiceMock },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TacosComponent);

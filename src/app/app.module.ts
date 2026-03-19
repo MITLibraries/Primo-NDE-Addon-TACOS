@@ -30,7 +30,10 @@ export const AppModule = ({ providers, shellRouter }: { providers: any, shellRou
   class AppModule implements DoBootstrap {
     private webComponentSelectorMap = new Map<string, NgElementConstructor<unknown>>();
 
-    constructor(private injector: Injector, private router: Router) {
+    constructor(
+      private injector: Injector,
+      private router: Router,
+    ) {
       router.dispose(); //this prevents the router from being initialized and interfering with the shell app router
     }
 
@@ -46,9 +49,9 @@ export const AppModule = ({ providers, shellRouter }: { providers: any, shellRou
      * @param componentName
      */
     public getComponentRef(componentName: string) {
+    public getComponentRef(componentName: string) {
       return this.webComponentSelectorMap.get(componentName);
     }
   }
-  return AppModule
-}
-
+  return AppModule;
+};

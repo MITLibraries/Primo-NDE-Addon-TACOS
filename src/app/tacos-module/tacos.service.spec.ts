@@ -1,6 +1,9 @@
 import { fakeAsync, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import {
+  provideHttpClientTesting,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TacosService } from './tacos.service';
 import { TacosConfigService } from './tacos-config/tacos-config.service';
 import { buildLogSearchEventQuery } from './tacos-query/tacos-query.builder';
@@ -11,16 +14,20 @@ describe('TacosService', () => {
   let fakeTacosUrl: string;
   beforeEach(() => {
     fakeTacosUrl = 'https://fake-tacos.test/graphql';
-    tacosConfigServiceMock = jasmine.createSpyObj('TacosConfigService', {}, {
-      tacosUrl: fakeTacosUrl
-    });
+    tacosConfigServiceMock = jasmine.createSpyObj(
+      'TacosConfigService',
+      {},
+      {
+        tacosUrl: fakeTacosUrl,
+      },
+    );
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         TacosService,
-        { provide: TacosConfigService, useValue: tacosConfigServiceMock }
-      ]
+        { provide: TacosConfigService, useValue: tacosConfigServiceMock },
+      ],
     });
 
     service = TestBed.inject(TacosService);
@@ -61,5 +68,5 @@ describe('TacosService', () => {
       expect(req.request.headers.get('Content-Type')).toBe('application/json');
       req.flush({});
     });
-  })
+  });
 });
