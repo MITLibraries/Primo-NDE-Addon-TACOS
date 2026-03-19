@@ -45,8 +45,16 @@ module.exports = {
           noErrorOnMissing: true,
           globOptions: {
             ignore: [
+        {
+          from: 'src/assets', to: 'assets',
+          noErrorOnMissing: true,
+          globOptions: {
+            ignore: [
               "**/.gitkeep", // Make sure this matches exactly the files you want to exclude
               "**/.*" // This pattern excludes all hidden files
+            ]
+          }
+        } // Adjust the paths as needed
             ]
           }
         } // Adjust the paths as needed
@@ -59,18 +67,23 @@ module.exports = {
     // END DISABLE ngDevMode as it is not needed in a remoteEntry
     new ModuleFederationPlugin({
       library: { type: "module" },
+      library: { type: "module" },
 
       // For remotes (please adjust)
-      name: "mit-tacos",
+      name: "customModule",
       filename: "remoteEntry.js",
       exposes: {
-        './mit-tacos': './src/bootstrapmit-tacos.ts',
+        './custom-module': './src/bootstrap.ts',
       },
 
       // For hosts (please adjust)
       // remotes: {
       //     "mfe1": "http://localhost:3000/remoteEntry.js",
+      // For hosts (please adjust)
+      // remotes: {
+      //     "mfe1": "http://localhost:3000/remoteEntry.js",
 
+      // },
       // },
 
       shared: share({
@@ -80,8 +93,8 @@ module.exports = {
         "rxjs": { requiredVersion: "auto" },
         "@angular/common/http": { requiredVersion: "auto" },
         '@angular/platform-browser': { requiredVersion: 'auto' },
-        '@ngx-translate/core': { singleton: true},
-        '@ngrx/store': { singleton: true},
+        '@ngx-translate/core': { singleton: true },
+        '@ngrx/store': { singleton: true },
         ...sharedMappings.getDescriptors()
       })
 
